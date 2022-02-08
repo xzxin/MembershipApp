@@ -13,7 +13,15 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        
+        String createSql =
+                "CREATE TABLE \"membership\" (\n" +
+                "  \"id\" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,\n" +
+                "  \"name\" TEXT NOT NULL,\n" +
+                "  \"phone\" text NOT NULL,\n" +
+                "  \"points\" integer NOT NULL DEFAULT 0,\n" +
+                "  \"create_time\" TEXT,\n" +
+                "  \"detail\" TEXT);";
+        sqLiteDatabase.execSQL(createSql);
     }
 
     @Override

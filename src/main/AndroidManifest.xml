@@ -12,7 +12,9 @@
         <activity
             android:name=".MembershipActivity"
             android:exported="true" />
-
+        <activity
+            android:name=".CreateMemberActivity"
+            android:exported="true" />
     </application>
 
 </manifest>
