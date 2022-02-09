@@ -1,22 +1,24 @@
 package com.example.membership;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.membership.database.DBHelper;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class MembershipActivity extends AppCompatActivity {
@@ -60,23 +62,36 @@ public class MembershipActivity extends AppCompatActivity {
             textView.setText(testDatum.get(3));
             tableRow.addView(textView);
 
+            LinearLayout linearLayout = new LinearLayout(this);
+            linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+            ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(150, 70);
+
+            ImageButton imageButton = new ImageButton(applicationContext);
+            imageButton.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageButton.setImageResource(android.R.drawable.ic_menu_search);
+            imageButton.setLayoutParams(layoutParams);
+            imageButton.setId(Integer.parseInt(testDatum.get(0)));
+            linearLayout.addView(imageButton);
+            imageButton.setOnClickListener(view -> {
+                int cardId = view.getId();
+
+            });
+
+
+            imageButton = new ImageButton(applicationContext);
+            imageButton.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageButton.setImageResource(android.R.drawable.ic_menu_manage);
+            imageButton.setLayoutParams(layoutParams);
+            imageButton.setId(Integer.parseInt(testDatum.get(0)));
+            linearLayout.addView(imageButton);
+
+            tableRow.addView(linearLayout);
+
             table.addView(tableRow);
         }
     }
 
     List<List<String>> getTestData() {
-//        int dataCount = 10;
-//        int columnCount = 5;
-//        int cardIndex = 1000;
-//        String[][] data = new String[dataCount][columnCount];
-//        for (int i = 0; i < dataCount; i++) {
-//            data[i][0] = String.valueOf(cardIndex++);
-//            data[i][1] = "Test" + i;
-//            data[i][2] = "13333333333";
-//            data[i][3] = "2000.01.01";
-//            data[i][4] = String.valueOf(2000 + i);
-//        }
-//        return data;
         List<List<String>> lists = new ArrayList<>();
         Cursor cursor = db.query("membership", new String[]{"id", "name", "phone", "points", "create_time", "detail"}, null, null, null, null, null);
         while(cursor.moveToNext()){
