@@ -1,6 +1,8 @@
 package com.example.membership;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -37,6 +39,8 @@ public class MembershipActivity extends AppCompatActivity {
             startActivity(i);
         });
 
+
+
         TableLayout table = (TableLayout)findViewById(R.id.tabel);
         List<List<String>>testData = getTestData();
         for (List<String> testDatum : testData) {
@@ -66,24 +70,52 @@ public class MembershipActivity extends AppCompatActivity {
             linearLayout.setOrientation(LinearLayout.HORIZONTAL);
             ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(150, 70);
 
-            ImageButton imageButton = new ImageButton(applicationContext);
-            imageButton.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageButton.setImageResource(android.R.drawable.ic_menu_search);
-            imageButton.setLayoutParams(layoutParams);
-            imageButton.setId(Integer.parseInt(testDatum.get(0)));
-            linearLayout.addView(imageButton);
-            imageButton.setOnClickListener(view -> {
+            ImageButton detailButton = new ImageButton(applicationContext);
+            detailButton.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            detailButton.setImageResource(android.R.drawable.ic_menu_search);
+            detailButton.setLayoutParams(layoutParams);
+            detailButton.setId(Integer.parseInt(testDatum.get(0)));
+            linearLayout.addView(detailButton);
+            detailButton.setOnClickListener(view -> {
                 int cardId = view.getId();
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("会员详情");
+                StringBuilder sb = new StringBuilder();
+                String sql = "SELECT id,name,phone,points,create_time,detail from membership where id=" + cardId;
+                Cursor cursor = db.rawQuery(sql, null);
+                while (cursor.moveToNext()) {
+                    int id = cursor.getInt(0);
+                    String name = cursor.getString(1);
+                    String phone = cursor.getString(2);
+                    String points = cursor.getString(3);
+                    String createTime = cursor.getString(4);
+                    String detail = cursor.getString(5);
+                    sb.append("会员卡号：").append(id).append("\n");
+                    sb.append("会员名称：").append(name).append("\n");
+                    sb.append("手机号码：").append(phone).append("\n");
+                    sb.append("积分：").append(points).append("\n");
+                    sb.append("注册时间：").append(createTime).append("\n");
+                    sb.append("详情：\n").append(detail).append("\n");
+                }
 
+                builder.setMessage(sb.toString());
+                builder.setNeutralButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog detailDialog = builder.create();
+                detailDialog.show();
             });
 
 
-            imageButton = new ImageButton(applicationContext);
-            imageButton.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageButton.setImageResource(android.R.drawable.ic_menu_manage);
-            imageButton.setLayoutParams(layoutParams);
-            imageButton.setId(Integer.parseInt(testDatum.get(0)));
-            linearLayout.addView(imageButton);
+            ImageButton operateButton = new ImageButton(applicationContext);
+            operateButton.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            operateButton.setImageResource(android.R.drawable.ic_menu_manage);
+            operateButton.setLayoutParams(layoutParams);
+            operateButton.setId(Integer.parseInt(testDatum.get(0)));
+            linearLayout.addView(operateButton);
 
             tableRow.addView(linearLayout);
 
